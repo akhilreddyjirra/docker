@@ -1,0 +1,63 @@
+version: '2'
+services:
+    gateway-app:
+        image: gateway
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_CLOUD_CONSUL_HOST=consul
+            - SPRING_CLOUD_CONSUL_PORT=8500
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://gateway-postgresql:5432/gateway
+            - JHIPSTER_SLEEP=10
+        ports:
+            - 8080:8080
+    gateway-postgresql:
+        image: postgres:9.6.5
+        environment:
+            - POSTGRES_USER=gateway
+            - POSTGRES_PASSWORD=
+    
+    orderbook-app:
+        image: orderbook
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_CLOUD_CONSUL_HOST=consul
+            - SPRING_CLOUD_CONSUL_PORT=8500
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://orderbook-postgresql:5432/orderbook
+            - JHIPSTER_SLEEP=10
+    orderbook-postgresql:
+        image: postgres:9.6.5
+        environment:
+            - POSTGRES_USER=orderbook
+            - POSTGRES_PASSWORD=
+    
+    consul:
+        extends:
+            file: consul.yml
+            service: consul
+    consul-config-loader:
+        extends:
+            file: consul.yml
+            service: consul-config-loader
+
+    jhipster-elasticsearch:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-elasticsearch
+    jhipster-logstash:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-logstash
+        depends_on:
+            - jhipster-elasticsearch
+    jhipster-console:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-console
+        depends_on:
+            - jhipster-elasticsearch
+    jhipster-import-dashboards:
+        extends:
+            file: jhipster-console.yml
+            service: jhipster-import-dashboards
+        depends_on:
+            - jhipster-elasticsearch

@@ -1,0 +1,14 @@
+{
+  "generator-jhipster": {
+    "appsFolders": [
+      "gateway",
+      "orderbook"
+    ],
+    "directoryPath": "../",
+    "gatewayType": "zuul",
+    "monitoring": "elk",
+    "consoleOptions": [],
+    "serviceDiscoveryType": "consul",
+    "jwtSecretKey": "e9ddc0795a3f122d3cbcc6033060902f04570989"
+  }
+}
